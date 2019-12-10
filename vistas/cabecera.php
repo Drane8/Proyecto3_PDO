@@ -17,9 +17,9 @@
     </header>
 
     <nav>
-        <a href="index.php" id="inicio">Inicio</a>
-        <a href="index.php" id="insertar">Insertar</a>
-        <a href="index.php" id="consultar">Consultar</a>
+        <a href="index.php" id="nav_inicio">Inicio</a>
+        <a href="index.php?form_insertar" id="nav_insertar">Insertar</a>
+        <a href="index.php?form_consultar" id="nav_consultar">Consultar</a>
     </nav>
 
     <main>

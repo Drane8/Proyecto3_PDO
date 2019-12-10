@@ -1,7 +1,7 @@
 <?php
 include "cabecera.php";
 echo "<script>
-  document.getElementById('insertar').classList.add('active');
+  document.getElementById('nav_insertar').classList.add('active');
 </script>";
 $aulas = array('A04', 'A05', 'A06', 'A13', 'A17', 'C12');
 $articulos = array(
@@ -46,7 +46,7 @@ $articulos = array(
             <option value="" class="oculto">--SELECCIONE ARTICULO--</option>
             <?php
             foreach ($articulos as $articulo) {
-                echo "<option value='".$articulo['codigo'] ." ".$articulo['articulo']."'>" . $articulo['articulo'] . "</option>";
+                echo "<option value='" . $articulo['codigo'] . " " . $articulo['articulo'] . "'>" . $articulo['articulo'] . "</option>";
             }
             ?>
         </select>

@@ -6,4 +6,3 @@ echo $resultado;
 echo "</div>";
 
 include "vistas/pie.php";
-?>

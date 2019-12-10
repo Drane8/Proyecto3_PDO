@@ -1,8 +1,7 @@
-
 * {
     box-sizing: border-box;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     font-family: "Source Sans Pro", Helvetica, sans-serif
 }
 
@@ -12,9 +11,9 @@ body {
     background-repeat: no-repeat;
     background-position: top center;
     background-attachment: scroll;
-    
 }
-a.logo{
+
+a.logo {
     -webkit-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out, opacity 0.5s ease, -webkit-transform 0.5s ease, visibility 0.5s;
     -ms-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out, opacity 0.5s ease, -ms-transform 0.5s ease, visibility 0.5s;
     transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out, opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
@@ -32,13 +31,16 @@ a.logo{
     color: white;
     display: inline-block;
 }
-.logo:hover{
+
+.logo:hover {
     color: #18bfef;
     border-color: #18bfef;
 }
-a:active, a:visited{
-    color:white;
+
+a:active, a:visited {
+    color: white;
 }
+
 header {
     padding: 5em 0;
     text-align: center;
@@ -48,10 +50,11 @@ nav {
     background-color: white;
     overflow: hidden;
     width: 70%;
-    margin:0 auto;
+    margin: 0 auto;
     background-color: rgba(255, 255, 255, 0.176);
-    max-width:850px;
+    max-width: 850px;
 }
+
 nav a {
     display: block;
     float: left;
@@ -69,14 +72,16 @@ nav a {
     font-weight: bold;
     text-transform: uppercase;
 }
-nav a.active{
-    color:black;
+
+nav a.active {
+    color: black;
     background-color: white;
 }
 
-nav a.active:hover{
+nav a.active:hover {
     background-color: white;
 }
+
 nav a:hover {
     color: #18bfef;
     -moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
@@ -92,7 +97,7 @@ main {
     width: 70%;
     overflow: hidden;
     min-height: 20em;
-    max-width:850px;
+    max-width: 850px;
 }
 
 section {
@@ -107,7 +112,7 @@ footer {
     color: grey;
     padding: 5px;
     text-align: center;
-    width:70%;
+    width: 70%;
     margin: 0 auto;
     font-family: "Source Sans Pro", Helvetica, sans-serif;
     font-weight: 900;
@@ -115,7 +120,7 @@ footer {
     letter-spacing: 0.075em;
     text-transform: uppercase;
     font-size: 0.8rem;
-    max-width:850px;
+    max-width: 850px;
 }
 
 input[type=text], select {
@@ -125,19 +130,19 @@ input[type=text], select {
     background-color: rgb(167, 167, 167, 0.6);
 }
 
-select,label,input,textarea{
-    display:inline-block;
+select, label, input, textarea {
+    display: inline-block;
     margin-bottom: 20px;
 }
 
-input[type=submit],input[type=reset] {
+input[type=submit], input[type=reset] {
     width: 30%;
     background-color: #1cb6e0;
     color: white;
     padding: 14px 0;
     border: none;
     border-radius: 4px;
-    cursor: pointer ;
+    cursor: pointer;
     text-transform: uppercase;
     font-weight: bold;
     -moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
@@ -148,7 +153,8 @@ input[type=submit],input[type=reset] {
     max-width: 180px;
     text-align: center;
 }
-input[type=submit]{
+
+input[type=submit] {
     margin-right: 30px;
 }
 
@@ -159,7 +165,8 @@ input[type=submit]:hover.input[type=reset]:hover {
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
     background-color: #57c7e6;
 }
-label{
+
+label {
     font-size: 0.8em;
 }
 
@@ -169,34 +176,40 @@ div#datos {
     padding: 20px;
     padding-top: 3em;
 }
-div#botones{
+
+div#botones {
     text-align: center;
 }
+
 div .uno {
     background-color: #dfd7d7;
 }
 
-div>img{
-    float:none;
+div>img {
+    float: none;
     position: relative;
     left: 15%;
     width: 70%;
 }
-div.texto{
+
+div.texto {
     position: relative;
     padding: 0;
     padding-top: 3em;
     text-align: center;
     min-height: 20em;
 }
-.oculto{
-    display:none;
+
+.oculto {
+    display: none;
 }
-textarea{
+
+textarea {
     resize: none;
     width: 100%;
 }
-output{
+
+output {
     position: relative;
-    bottom:5px;
+    bottom: 5px;
 }

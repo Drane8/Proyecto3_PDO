@@ -6,9 +6,10 @@ echo "<script>
 
 ?>
 <form id="form" action="index.php" method="post">
-    <div id="datos">
-            <input type="submit" name="form_insertar" value="Insertar" />
-            <input type="submit" name="form_consultar" value="Consultar" />
+    <div id="inicio">
+        <input type="submit" name="form_insertar" value="Insertar" />
+        <br />
+        <input type="submit" name="form_consultar" value="Consultar" />
     </div>
 </form>
 <?php

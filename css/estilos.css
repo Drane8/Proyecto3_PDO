@@ -200,6 +200,14 @@ div.texto {
     min-height: 20em;
 }
 
+div#inicio{
+    margin: 0 auto;
+    width: 70%;
+    padding: 20px;
+    padding-top: 3em;
+    text-align: center;
+}
+
 .oculto {
     display: none;
 }

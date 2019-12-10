@@ -34,7 +34,7 @@ $articulos = array(
 ?>
 <form id="form" action="index.php" method="post">
     <div id="datos">
-        <select id="aula" name="aula">
+        <select id="aula" name="aula" required>
             <option value="" class="oculto">--SELECCIONE AULA--</option>
             <?php
             foreach ($aulas as $aula) {
@@ -42,11 +42,11 @@ $articulos = array(
             }
             ?>
         </select>
-        <select id="articulo" name="articulo">
+        <select id="articulo" name="articulo" required>
             <option value="" class="oculto">--SELECCIONE ARTICULO--</option>
             <?php
             foreach ($articulos as $articulo) {
-                echo "<option value='" . $articulo['codigo'] . " " . $articulo['articulo'] . "'>" . $articulo['articulo'] . "</option>";
+                echo "<option value='" . $articulo['codigo'] . "|" . $articulo['articulo'] . "'>" . $articulo['articulo'] . "</option>";
             }
             ?>
         </select>

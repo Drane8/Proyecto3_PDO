@@ -10,11 +10,17 @@ class Controlador
         } else if (isset($_POST['form_consultar']) || isset($_GET['form_consultar'])) { //El usuario quiere consultar datos
             $this->mostrarConsultar();
         } else if (isset($_POST['insertar'])) { //El usuario ya ha insertado datos
+
             $aula = $_POST['aula'];
-            //IMPORTANTE A HACER explode 
-            $articulo = $_POST['articulo'];
+            $articulo = explode("|", $_POST['articulo']);
             $cantidadArticulos = $_POST['cantidadArticulos'];
-            $resultado = "$aula  $articulo $cantidadArticulos";
+            $fecha = $_POST['fecha'];
+            $observaciones = $_POST['observaciones'];
+            $resultado = "Aula: $aula <br/>" .
+                "Articulo: " . $articulo[0] . " " . $articulo[1] . "<br/>" .
+                "Cantidad: $cantidadArticulos<br/>" .
+                "Fecha compra: $fecha<br/>" .
+                "Observaciones: $observaciones";
             $this->mostrarResultado($resultado);
             exit();
         } else { //Si el usuario no ha realizado ninguna accion mostramos la pagina inicial

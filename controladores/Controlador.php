@@ -70,6 +70,6 @@ class Controlador
      */
     private function mostrarResultado($resultado)
     {
-        include 'vistas/vista_resultado.php';
+        include 'vistas/form_insertar.php';
     }
 }

@@ -63,5 +63,10 @@ $articulos = array(
     </div>
 </form>
 <?php
+if (isset($resultado)) {
+    echo "<div class='texto' />";
+    echo $resultado;
+    echo "</div>";
+}
 include "pie.php";
 ?>

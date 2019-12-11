@@ -1,9 +1,21 @@
 <?php
+
+/**
+ * Se encarga de gestionar las interacciones del usuario en la vista, 
+ * pide los datos al modelo y los devuelve de nuevo a la vista para que 
+ * esta los muestre al usuario.
+ * 
+ * @author Daniel García e Idoia Palomar
+ */
 class Controlador
 {
+    /**
+     * Función principal que gestiona las interacciones
+     *
+     */
     public function run()
     {
-        //Comprobamos cual es la accion que ha llevado a cabo el usuario
+        //Comprobamos cual es la acción que ha llevado a cabo el usuario
         if (isset($_POST['form_insertar']) || isset($_GET['form_insertar'])) { //El usuario quiere insertar datos
             $this->mostrarInsertar();
             exit();
@@ -14,16 +26,16 @@ class Controlador
             $aula = $_POST['aula'];
             $articulo = explode("|", $_POST['articulo']);
             $cantidadArticulos = $_POST['cantidadArticulos'];
-            $fecha = $_POST['fecha'];
+            $fecha = date("d/m/Y", strtotime($_POST['fecha']));
             $observaciones = $_POST['observaciones'];
             $resultado = "Aula: $aula <br/>" .
-                "Articulo: " . $articulo[0] . " " . $articulo[1] . "<br/>" .
+                "Artículo: " . $articulo[0] . " " . $articulo[1] . "<br/>" .
                 "Cantidad: $cantidadArticulos<br/>" .
                 "Fecha compra: $fecha<br/>" .
                 "Observaciones: $observaciones";
             $this->mostrarResultado($resultado);
             exit();
-        } else { //Si el usuario no ha realizado ninguna accion mostramos la pagina inicial
+        } else { //Si el usuario no ha realizado ninguna acción mostramos la página inicial
             $this->mostrarInicio();
             exit();
         }

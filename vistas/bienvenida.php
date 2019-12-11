@@ -3,7 +3,6 @@ include "cabecera.php";
 echo "<script>
   document.getElementById('nav_inicio').classList.add('active');
 </script>";
-
 ?>
 <form id="form" action="index.php" method="post">
     <div id="inicio">

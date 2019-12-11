@@ -7,11 +7,11 @@ $aulas = array('A04', 'A05', 'A06', 'A13', 'A17', 'C12');
 $articulos = array(
     array(
         'codigo' => '110',
-        'articulo' => 'ODENADOR PC'
+        'articulo' => 'ORDENADOR PC'
     ),
     array(
         'codigo' => '120',
-        'articulo' => 'ODENADOR SERVIDOR RED'
+        'articulo' => 'ORDENADOR SERVIDOR RED'
     ),
     array(
         'codigo' => '130',
@@ -23,11 +23,11 @@ $articulos = array(
     ),
     array(
         'codigo' => '211',
-        'articulo' => 'IMPRESORAS LASER'
+        'articulo' => 'IMPRESORAS MATRICIAL'
     ),
     array(
         'codigo' => '212',
-        'articulo' => 'IMPRESORAS LASER'
+        'articulo' => 'IMPRESORAS CHORRO DE TINTA'
     )
 
 );

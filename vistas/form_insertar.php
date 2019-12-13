@@ -3,34 +3,6 @@ include "cabecera.php";
 echo "<script>
   document.getElementById('nav_insertar').classList.add('active');
 </script>";
-$aulas = array('A04', 'A05', 'A06', 'A13', 'A17', 'C12');
-$articulos = array(
-    array(
-        'codigo' => '110',
-        'articulo' => 'ORDENADOR PC'
-    ),
-    array(
-        'codigo' => '120',
-        'articulo' => 'ORDENADOR SERVIDOR RED'
-    ),
-    array(
-        'codigo' => '130',
-        'articulo' => 'OTROS-ORDENADORES'
-    ),
-    array(
-        'codigo' => '210',
-        'articulo' => 'IMPRESORAS LASER'
-    ),
-    array(
-        'codigo' => '211',
-        'articulo' => 'IMPRESORAS MATRICIAL'
-    ),
-    array(
-        'codigo' => '212',
-        'articulo' => 'IMPRESORAS CHORRO DE TINTA'
-    )
-
-);
 ?>
 <form id="form" action="index.php" method="post">
     <div id="datos">
@@ -38,7 +10,7 @@ $articulos = array(
             <option value="" class="oculto">--SELECCIONE AULA--</option>
             <?php
             foreach ($aulas as $aula) {
-                echo "<option value='$aula'>$aula</option>";
+                echo "<option value='".$aula['clave_instalacion']."'>".$aula['clave_instalacion']."</option>";
             }
             ?>
         </select>

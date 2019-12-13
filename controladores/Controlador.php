@@ -17,7 +17,15 @@ class Controlador
     {
         //Comprobamos cual es la acción que ha llevado a cabo el usuario
         if (isset($_POST['form_insertar']) || isset($_GET['form_insertar'])) { //El usuario quiere insertar datos
-            $this->mostrarInsertar();
+            $db = $this->conectaDb();
+            $consultaAulas = "SELECT clave_instalacion FROM instalaciones";
+            $aulas = $db->prepare($consultaAulas);
+            $aulas->execute();
+            $consultaArticulos = "SELECT * FROM articulos";
+            $articulos = $db->prepare($consultaArticulos);
+            $articulos->execute();
+            $this->mostrarInsertar($aulas,$articulos);
+            $db = null;
             exit();
         } else if (isset($_POST['form_consultar']) || isset($_GET['form_consultar'])) { //El usuario quiere consultar datos
             $this->mostrarConsultar();
@@ -52,7 +60,7 @@ class Controlador
     /**
      * Se encarga de mostrar la vista del formulario de insertar
      */
-    private function mostrarInsertar()
+    private function mostrarInsertar($aulas,$articulos)
     {
         include 'vistas/form_insertar.php';
     }
@@ -72,4 +80,25 @@ class Controlador
     {
         include 'vistas/form_insertar.php';
     }
+
+    function conectaDb()
+    {
+        try {
+            $db = new PDO("mysql:host=" . "localhost" . ";dbname=" .
+                "inventario_daid_p3", "alumno", "alumno");
+            // Se puede configurar el objeto 
+            $db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            $db->exec("set names utf8mb4");
+            return ($db);
+        } catch (PDOException $e) {
+            echo " <p>Error: " . $e->getMessage() . "</p>\n";
+            exit();
+            //OTRA Opción podría ser enviar a otra página 
+            header('Location: vistas/error.php?error=ERROR');
+            exit();
+        }
+    }
+
+
+    
 }

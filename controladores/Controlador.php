@@ -17,31 +17,18 @@ class Controlador
     {
         //Comprobamos cual es la acción que ha llevado a cabo el usuario
         if (isset($_POST['form_insertar']) || isset($_GET['form_insertar'])) { //El usuario quiere insertar datos
-            $db = $this->conectaDb();
-            $consultaAulas = "SELECT clave_instalacion FROM instalaciones";
-            $aulas = $db->prepare($consultaAulas);
-            $aulas->execute();
-            $consultaArticulos = "SELECT * FROM articulos";
-            $articulos = $db->prepare($consultaArticulos);
-            $articulos->execute();
-            $this->mostrarInsertar($aulas,$articulos);
-            $db = null;
+
+            $this->mostrarInsertar("validar");
+
             exit();
         } else if (isset($_POST['form_consultar']) || isset($_GET['form_consultar'])) { //El usuario quiere consultar datos
             $this->mostrarConsultar();
-        } else if (isset($_POST['insertar'])) { //El usuario ya ha insertado datos
-
-            $aula = $_POST['aula'];
-            $articulo = explode("|", $_POST['articulo']);
-            $cantidadArticulos = $_POST['cantidadArticulos'];
-            $fecha = date("d/m/Y", strtotime($_POST['fecha']));
-            $observaciones = $_POST['observaciones'];
-            $resultado = "Aula: $aula <br/>" .
-                "Artículo: " . $articulo[0] . " " . $articulo[1] . "<br/>" .
-                "Cantidad: $cantidadArticulos<br/>" .
-                "Fecha compra: $fecha<br/>" .
-                "Observaciones: $observaciones";
-            $this->mostrarResultado($resultado);
+        } else if (isset($_POST['insertar']) && ($_POST['insertar']) == 'validar') { //El usuario ya ha insertado datos
+            $this->validar();
+            exit();
+        } elseif (isset($_POST['insertar']) && ($_POST['insertar']) == 'continuar') {
+            unset($_POST);
+            $this->mostrarFormulario("validar", null, null);
             exit();
         } else { //Si el usuario no ha realizado ninguna acción mostramos la página inicial
             $this->mostrarInicio();
@@ -60,8 +47,16 @@ class Controlador
     /**
      * Se encarga de mostrar la vista del formulario de insertar
      */
-    private function mostrarInsertar($aulas,$articulos)
+    private function mostrarInsertar($fase)
     {
+        $db = $this->conectaDb();
+        $consultaAulas = "SELECT clave_instalacion FROM instalaciones";
+        $aulas = $db->prepare($consultaAulas);
+        $aulas->execute();
+        $consultaArticulos = "SELECT * FROM articulos";
+        $articulos = $db->prepare($consultaArticulos);
+        $articulos->execute();
+        $db = null;
         include 'vistas/form_insertar.php';
     }
 
@@ -100,5 +95,61 @@ class Controlador
     }
 
 
-    
+
+
+    //-------------------------------------------------
+
+
+
+
+    private function mostrarFormulario($fase, $validador, $resultado)
+    {
+        $db = $this->conectaDb();
+        $consultaAulas = "SELECT clave_instalacion FROM instalaciones";
+        $aulas = $db->prepare($consultaAulas);
+        $aulas->execute();
+        $consultaArticulos = "SELECT * FROM articulos";
+        $articulos = $db->prepare($consultaArticulos);
+        $articulos->execute();
+        $db = null;
+        include 'vistas/form_insertar.php';
+    }
+
+    private function crearReglasDeValidacion()
+    {
+        $reglasValidacion = array(
+            "aula" => array("required" => true),
+            "articulo" => array("required" => true),
+            "cantidadArticulos" => array("min" => 1, "max" => 100, "required" => true),
+            "fecha" => array("fechaMax" => "2020-01-13"),
+            "observaciones" => array("maxCaracteres" => 250),
+        );
+
+        return $reglasValidacion;
+    }
+
+    private function validar()
+    {
+        $validador = new ValidadorForm();
+        $reglasValidacion = $this->crearReglasDeValidacion();
+        $validador->validar($_POST, $reglasValidacion);
+        if ($validador->esValido()) {
+            $aula = $_POST['aula'];
+            $articulo = explode("|", $_POST['articulo']);
+            $cantidadArticulos = $_POST['cantidadArticulos'];
+            $fecha = date("d/m/Y", strtotime($_POST['fecha']));
+            $observaciones = $_POST['observaciones'];
+            $resultado = "Aula: $aula <br/>" .
+                "Artículo: " . $articulo[0] . " " . $articulo[1] . "<br/>" .
+                "Cantidad: $cantidadArticulos<br/>" .
+                "Fecha compra: $fecha<br/>" .
+                "Observaciones: $observaciones";
+            $this->mostrarFormulario("continuar", $validador, $resultado);
+            exit();
+        }
+
+        // formulario no correcto, mostrarlo nuevamente con los errores
+        $this->mostrarFormulario("validar", $validador, null);
+        exit();
+    }
 }

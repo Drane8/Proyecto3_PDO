@@ -35,7 +35,12 @@ class Input
         if (isset($_POST[$campo])) {
             $campovalue = $_POST[$campo];
         } else {
-            $campovalue = "";
+            if ($campo == 'cantidadArticulos') {
+                $campovalue = 1;
+            }
+            else{
+                $campovalue = "";
+            }
         }
 
         return Input::filtrar($campovalue);

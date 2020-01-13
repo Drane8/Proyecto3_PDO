@@ -26,7 +26,7 @@ class ValidadorForm
 				if (isset($reglas["max"]) && $fuentes[$campo] > $reglas["max"]) {
 					$this->addError($campo, "error, $campo tiene que ser menor o igual que " . $reglas['max']);
 				}
-				if (isset($reglas["fechaMax"]) && date_diff($fuentes[$campo], $reglas["fechaMax"]) < 0) {
+				if (isset($reglas["fechaMax"]) && (strtotime($fuentes[$campo]) - strtotime($reglas["fechaMax"])) > 0) {
 					$this->addError($campo, "error, la fecha de $campo tiene que ser igual o anterior al dia actual");
 				}
 				if (isset($reglas['maxCaracteres']) && strlen($fuentes[$campo]) >= $reglas['maxCaracteres']) {

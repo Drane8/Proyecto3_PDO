@@ -17,16 +17,14 @@ class Controlador
     {
         //Comprobamos cual es la acción que ha llevado a cabo el usuario
         if (isset($_POST['form_insertar']) || isset($_GET['form_insertar'])) { //El usuario quiere insertar datos
-
-            $this->mostrarInsertar("validar");
-
+            $this->mostrarFormulario("validar", null, null);
             exit();
         } else if (isset($_POST['form_consultar']) || isset($_GET['form_consultar'])) { //El usuario quiere consultar datos
             $this->mostrarConsultar();
-        } else if (isset($_POST['insertar']) && ($_POST['insertar']) == 'validar') { //El usuario ya ha insertado datos
+        } else if (isset($_POST['insertar']) && ($_POST['insertar']) == 'validar') { //El usuario ya ha insertado datos para validar
             $this->validar();
             exit();
-        } elseif (isset($_POST['insertar']) && ($_POST['insertar']) == 'continuar') {
+        } elseif (isset($_POST['insertar']) && ($_POST['insertar']) == 'continuar') { //Los datos ya han sido insertados y validados.
             unset($_POST);
             $this->mostrarFormulario("validar", null, null);
             exit();
@@ -45,9 +43,21 @@ class Controlador
     }
 
     /**
-     * Se encarga de mostrar la vista del formulario de insertar
+     * Se encarga de mostrar la vista del formulario de consultar
      */
-    private function mostrarInsertar($fase)
+    private function mostrarConsultar()
+    {
+        include "vistas/form_consultar.php";
+    }
+
+    /**
+     * Funcion para mostrar el formulario de insertar
+     *
+     * @param mixed $fase: El estado en la que se encuentra el formulario (validar o continuar) 
+     * @param mixed $validador: El objeto con el que se va a validar los datos
+     * @param mixed $resultado: El resultado para mostrar los datos una vez validados
+     */
+    private function mostrarFormulario($fase, $validador, $resultado)
     {
         $db = $this->conectaDb();
         $consultaAulas = "SELECT clave_instalacion FROM instalaciones";
@@ -61,21 +71,8 @@ class Controlador
     }
 
     /**
-     * Se encarga de mostrar la vista del formulario de consultar
+     * Esta funcion se encarga de realizar la conexión con la base de datos
      */
-    private function mostrarConsultar()
-    {
-        include "vistas/form_consultar.php";
-    }
-
-    /**
-     * Se encarga de mostrar la vista del resultado
-     */
-    private function mostrarResultado($resultado)
-    {
-        include 'vistas/form_insertar.php';
-    }
-
     function conectaDb()
     {
         try {
@@ -94,40 +91,28 @@ class Controlador
         }
     }
 
-
-
-
-    //-------------------------------------------------
-
-
-
-
-    private function mostrarFormulario($fase, $validador, $resultado)
-    {
-        $db = $this->conectaDb();
-        $consultaAulas = "SELECT clave_instalacion FROM instalaciones";
-        $aulas = $db->prepare($consultaAulas);
-        $aulas->execute();
-        $consultaArticulos = "SELECT * FROM articulos";
-        $articulos = $db->prepare($consultaArticulos);
-        $articulos->execute();
-        $db = null;
-        include 'vistas/form_insertar.php';
-    }
-
+    /**
+     * Metodo usado para crear las reglas de validacion que necesitemos
+     *
+     * @return mixed Devuelve un array con las reglas de validacion
+     */
     private function crearReglasDeValidacion()
     {
         $reglasValidacion = array(
             "aula" => array("required" => true),
             "articulo" => array("required" => true),
             "cantidadArticulos" => array("min" => 1, "max" => 100, "required" => true),
-            "fecha" => array("fechaMax" => "2020-01-13"),
+            "fecha" => array("fechaMax" => date('Y-m-d')),
             "observaciones" => array("maxCaracteres" => 250),
         );
 
         return $reglasValidacion;
     }
 
+    /**
+     * Funcion utilizada para validar los datos. A traves de esta funcion
+     * hacemos uso de la clase ValidadorForm.
+     */
     private function validar()
     {
         $validador = new ValidadorForm();
@@ -137,7 +122,10 @@ class Controlador
             $aula = $_POST['aula'];
             $articulo = explode("|", $_POST['articulo']);
             $cantidadArticulos = $_POST['cantidadArticulos'];
-            $fecha = date("d/m/Y", strtotime($_POST['fecha']));
+            $fecha = "";
+            if ($_POST['fecha'] != "") {
+                $fecha = date("d/m/Y", strtotime($_POST['fecha']));
+            }
             $observaciones = $_POST['observaciones'];
             $resultado = "Aula: $aula <br/>" .
                 "Artículo: " . $articulo[0] . " " . $articulo[1] . "<br/>" .

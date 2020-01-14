@@ -37,8 +37,7 @@ class Input
         } else {
             if ($campo == 'cantidadArticulos') {
                 $campovalue = 1;
-            }
-            else{
+            } else {
                 $campovalue = "";
             }
         }

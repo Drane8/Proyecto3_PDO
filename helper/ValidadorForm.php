@@ -27,7 +27,7 @@ class ValidadorForm
 	 * @param array $reglasValidacion: Las reglas a seguir para las validaciones
 	 * 
 	 */
-	public function validar(array $fuentes, array $reglasValidacion)
+	/*public function validar(array $fuentes, array $reglasValidacion)
 	{
 		foreach ($reglasValidacion as $campo => $reglas) {
 			if (isset($fuentes[$campo])) {
@@ -49,6 +49,82 @@ class ValidadorForm
 			}
 		}
 		$this->valido = empty($this->errores);
+	}*/
+	public function validar(array $fuentes, array $reglasValidacion)
+	{
+		foreach ($reglasValidacion as $campo => $reglas) {
+			if (isset($fuentes[$campo])) {
+				foreach ($reglas as $regla => $valor) {
+					if (method_exists($this, $regla)) {
+						$resul = $this->$regla($fuentes[$campo], $valor);
+						if ($resul[0]) {
+							$this->addError($campo, "Error en $campo: " . $resul[1]);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Funcion para comprobar si un valor es menor que otro
+	 *
+	 * @param mixed $valor: Valor a comprobar
+	 * @param mixed $regla: Limite para la comprobacion
+	 * @return array Array que contiene si se cumple la condicion y el mensaje de error
+	 */
+	public function min($valor, $regla)
+	{
+		return array(($valor < $regla), "tiene que ser mayor que $regla");
+	}
+
+	/**
+	 * Funcion para comprobar si un valor es menor que otro
+	 *
+	 * @param mixed $valor: Valor a comprobar
+	 * @param mixed $regla: Limite para la comprobacion
+	 * @return array Array que contiene si se cumple la condicion y el mensaje de error
+	 */
+	public function max($valor, $regla)
+	{
+		return array($valor > $regla, "tiene que ser menor que $regla");
+	}
+
+	/**
+	 * Funcion para comprobar si un valor es mayor que otro
+	 *
+	 * @param mixed $valor: Valor a comprobar
+	 * @param mixed $regla: Limite para la comprobacion
+	 * @return array Array que contiene si se cumple la condicion y el mensaje de error
+	 */
+	public function fechaMax($valor, $regla)
+	{
+		return array(strtotime($valor) - strtotime($regla) > 0, "la fecha tiene que ser anterior o igual a " . date("d/m/Y", strtotime($regla)));
+	}
+
+
+	/**
+	 * Funcion para comprobar si un texto supera el máximo de caracteres
+	 *
+	 * @param mixed $valor: Texto a comprobar
+	 * @param mixed $regla: Limite de caracteres
+	 * @return array Array que contiene si se cumple la condicion y el mensaje de error
+	 */
+	public function maxCaracteres($valor, $regla)
+	{
+		return array(strlen($valor) > $regla, "el máximo de caracteres es $regla");
+	}
+
+
+	/**
+	 * Funcion para comprobar si un valor esta vacio
+	 *
+	 * @param mixed $valor: Valor a comprobarç
+	 * @return array Array que contiene si se cumple la condicion y el mensaje de error
+	 */
+	public function required($valor)
+	{
+		return array(empty($valor), "es necesario introducir el valor");
 	}
 
 	/**

@@ -25,11 +25,9 @@ if (Input::siEnviado("post")) {
             <option value="" class="oculto">--SELECCIONE AULA--</option>
             <?php
             foreach ($aulas as $aula) {
-                if (Input::get('aula') == $aula['clave_instalacion']) {
-                    echo "<option value='" . $aula['clave_instalacion'] . "' selected>" . $aula['clave_instalacion'] . "</option>";
-                } else {
-                    echo "<option value='" . $aula['clave_instalacion'] . "'>" . $aula['clave_instalacion'] . "</option>";
-                }
+                echo "<option value='" .$aula["clave_instalacion"]. "'";
+                echo Utilidades::verificarLista(Input::get("aula"), $aula['clave_instalacion']);
+                echo "> ". $aula['clave_instalacion'] . "</option>";
             }
             ?>
         </select>
@@ -37,11 +35,9 @@ if (Input::siEnviado("post")) {
             <option value="" class="oculto">--SELECCIONE ARTICULO--</option>
             <?php
             foreach ($articulos as $articulo) {
-                if (Input::get('articulo') == $articulo['codigo'] . "|" . $articulo['articulo']) {
-                    echo "<option value='" . $articulo['codigo'] . "|" . $articulo['articulo'] . "' selected>" . $articulo['articulo'] . "</option>";
-                } else {
-                    echo "<option value='" . $articulo['codigo'] . "|" . $articulo['articulo'] . "'>" . $articulo['articulo'] . "</option>";
-                }
+                echo "<option value='" . $articulo['codigo'] . "|" . $articulo['articulo']. "'";
+                echo Utilidades::verificarLista(Input::get("articulo"), $articulo['codigo'] . "|" . $articulo['articulo']);
+                echo "> ". $articulo['articulo'] . "</option>";
             }
             ?>
         </select>
@@ -57,8 +53,8 @@ if (Input::siEnviado("post")) {
         </div>
     </div>
 </form>
-<?php
 
+<?php
 //SALIDAS
 if (isset($resultado)) {
     echo "<div class='texto' />";

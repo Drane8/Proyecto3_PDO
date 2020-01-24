@@ -9,6 +9,13 @@
  */
 class Controlador
 {
+
+    private $daoArticulo;
+
+    public function __construct() {
+        $this->daoArticulo = new DaoArticulo();
+    }
+
     /**
      * Función principal que gestiona las interacciones
      *
@@ -63,10 +70,7 @@ class Controlador
         $consultaAulas = "SELECT clave_instalacion FROM instalaciones";
         $aulas = $db->prepare($consultaAulas);
         $aulas->execute();
-        $consultaArticulos = "SELECT * FROM articulos";
-        $articulos = $db->prepare($consultaArticulos);
-        $articulos->execute();
-        $db = null;
+        $articulos = $this->daoArticulo->consultarArticulos();
         include 'vistas/form_insertar.php';
     }
 

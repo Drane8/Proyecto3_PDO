@@ -12,7 +12,7 @@ class ValidadorForm
 	/**
 	 * Constructor de la clase ValidadorForm
 	 */
-	public function construct()
+	public function __construct()
 	{
 		$this->errores = array();
 		$this->reglasValidacion = null;
@@ -64,6 +64,7 @@ class ValidadorForm
 				}
 			}
 		}
+		$this->valido = empty($this->errores);
 	}
 
 	/**

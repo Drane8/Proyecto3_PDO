@@ -25,19 +25,21 @@ if (Input::siEnviado("post")) {
             <option value="" class="oculto">--SELECCIONE AULA--</option>
             <?php
             foreach ($aulas as $aula) {
-                echo "<option value='" .$aula["clave_instalacion"]. "'";
+                echo "<option value='" . $aula["clave_instalacion"] . "'";
                 echo Utilidades::verificarLista(Input::get("aula"), $aula['clave_instalacion']);
-                echo "> ". $aula['clave_instalacion'] . "</option>";
+                echo "> " . $aula['clave_instalacion'] . "</option>";
             }
             ?>
         </select>
         <select id="articulo" name="articulo" required>
             <option value="" class="oculto">--SELECCIONE ARTICULO--</option>
             <?php
-            foreach ($articulos as $articulo) {
-                echo "<option value='" . $articulo['codigo'] . "|" . $articulo['articulo']. "'";
-                echo Utilidades::verificarLista(Input::get("articulo"), $articulo['codigo'] . "|" . $articulo['articulo']);
-                echo "> ". $articulo['articulo'] . "</option>";
+            foreach ($articulos as  $articulo) {
+                    $codigo = $articulo->getCodigo();
+                    $nombre = $articulo->getArticulo();
+                    echo "<option value='$codigo|$nombre'";
+                    echo Utilidades::verificarLista(Input::get("articulo"),"$codigo|$nombre");
+                    echo "> $nombre</option>";
             }
             ?>
         </select>

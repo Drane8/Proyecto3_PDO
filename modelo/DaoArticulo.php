@@ -14,7 +14,7 @@ class DaoArticulo
     {
         $articulos = array();
         $this->db->conectar();
-        $sql = "SELECT * FROM articulos";
+        $sql = "SELECT codigo,articulo FROM articulos";
         $resul = $this->db->ejecutarSQL($sql);
         foreach ($resul as $valor) {
             $articulo = new Articulo($valor['codigo'], $valor['articulo']);

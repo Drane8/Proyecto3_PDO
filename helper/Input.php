@@ -53,10 +53,17 @@ class Input
      */
     public static function filtrar($datos)
     {
-        $datos;
-        $datos = strip_tags($datos);
-        $datos = htmlspecialchars($datos);
-        $datos = trim($datos);
-        return $datos;
+        if (!is_array($datos)) {
+            $datosFiltrados = $datos;
+            $datosFiltrados = strip_tags($datosFiltrados);
+            $datosFiltrados = htmlspecialchars($datosFiltrados);
+            $datosFiltrados = trim($datosFiltrados);
+        }else{
+            $datosFiltrados = array();
+            foreach ($datos as $dato) {
+                $datosFiltrados[] = Input::filtrar($dato);
+            }
+        }
+        return $datosFiltrados;
     }
 }

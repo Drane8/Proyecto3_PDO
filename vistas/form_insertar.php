@@ -16,6 +16,10 @@ if (Input::siEnviado("post")) {
         echo "</div>";
     }
 }
+if(isset($errorInserccion)){
+    echo "<div class='errores'>Ya existe una entrada con esas claves en la base de datos </div>";
+    setcookie("errorInserccion",true, time() - 1);        
+}
 
 //ENTRADAS
 ?>
@@ -24,10 +28,11 @@ if (Input::siEnviado("post")) {
         <select id="aula" name="aula" required>
             <option value="" class="oculto">--SELECCIONE AULA--</option>
             <?php
-            foreach ($aulas as $aula) {
-                echo "<option value='" . $aula["clave_instalacion"] . "'";
-                echo Utilidades::verificarLista(Input::get("aula"), $aula['clave_instalacion']);
-                echo "> " . $aula['clave_instalacion'] . "</option>";
+            foreach ($instalaciones as $instalacion) {
+                $clave = $instalacion->getClave();
+                echo "<option value='$clave'";
+                echo Utilidades::verificarLista(Input::get("aula"), $clave);
+                echo "> $clave</option>";
             }
             ?>
         </select>

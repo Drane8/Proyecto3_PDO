@@ -11,9 +11,16 @@ class Controlador
 {
 
     private $daoArticulo;
+    private $daoInstalacion;
+    private $daoInventario;
+    private $errorInserccion;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->daoArticulo = new DaoArticulo();
+        $this->daoInstalacion = new DaoInstalacion();
+        $this->daoInventario = new DaoInventario();
+        $this->errorInserccion = false;
     }
 
     /**
@@ -27,7 +34,15 @@ class Controlador
             $this->mostrarFormulario("validar", null, null);
             exit();
         } else if (isset($_POST['form_consultar']) || isset($_GET['form_consultar'])) { //El usuario quiere consultar datos
-            $this->mostrarConsultar();
+            $this->mostrarConsultar("validar", null, null);
+            exit();
+        } else if (isset($_POST['consultar']) && ($_POST['consultar']) == 'validar') { //El usuario ha seleccionado datos a consultar
+            $this->validar();
+            exit();
+        } else if (isset($_POST['consultar']) && ($_POST['consultar']) == 'continuar') { //Los datos se han validado y mostrado
+            unset($_POST);
+            $this->mostrarConsultar("validar", null, null);
+            exit();
         } else if (isset($_POST['insertar']) && ($_POST['insertar']) == 'validar') { //El usuario ya ha insertado datos para validar
             $this->validar();
             exit();
@@ -52,8 +67,9 @@ class Controlador
     /**
      * Se encarga de mostrar la vista del formulario de consultar
      */
-    private function mostrarConsultar()
+    private function mostrarConsultar($fase, $validador, $resultado)
     {
+        $instalaciones = $this->daoInstalacion->consultarInstalaciones();
         include "vistas/form_consultar.php";
     }
 
@@ -66,33 +82,12 @@ class Controlador
      */
     private function mostrarFormulario($fase, $validador, $resultado)
     {
-        $db = $this->conectaDb();
-        $consultaAulas = "SELECT clave_instalacion FROM instalaciones";
-        $aulas = $db->prepare($consultaAulas);
-        $aulas->execute();
+        $instalaciones = $this->daoInstalacion->consultarInstalaciones();
         $articulos = $this->daoArticulo->consultarArticulos();
-        include 'vistas/form_insertar.php';
-    }
-
-    /**
-     * Esta funcion se encarga de realizar la conexión con la base de datos
-     */
-    function conectaDb()
-    {
-        try {
-            $db = new PDO("mysql:host=" . "localhost" . ";dbname=" .
-                "inventario_daid_p3", "alumno", "alumno");
-            // Se puede configurar el objeto 
-            $db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            $db->exec("set names utf8mb4");
-            return ($db);
-        } catch (PDOException $e) {
-            echo " <p>Error: " . $e->getMessage() . "</p>\n";
-            exit();
-            //OTRA Opción podría ser enviar a otra página 
-            header('Location: vistas/error.php?error=ERROR');
-            exit();
+        if ($this->errorInserccion) {
+            $errorInserccion = true;
         }
+        include 'vistas/form_insertar.php';
     }
 
     /**
@@ -122,26 +117,79 @@ class Controlador
         $validador = new ValidadorForm();
         $reglasValidacion = $this->crearReglasDeValidacion();
         $validador->validar($_POST, $reglasValidacion);
+
+        //Comprobamos si los datos son validos
         if ($validador->esValido()) {
-            $aula = $_POST['aula'];
-            $articulo = explode("|", $_POST['articulo']);
-            $cantidadArticulos = $_POST['cantidadArticulos'];
-            $fecha = "";
-            if ($_POST['fecha'] != "") {
-                $fecha = date("d/m/Y", strtotime($_POST['fecha']));
+            //Comprobamos de que formulario se trata
+            if (isset($_POST['insertar'])) {
+                $aula = $_POST['aula'];
+                $articulo = explode("|", $_POST['articulo']);
+                $cantidadArticulos = $_POST['cantidadArticulos'];
+                $fecha = $_POST['fecha'];
+                if (empty($fecha)) {
+                    $fecha = null;
+                }
+                $observaciones = $_POST['observaciones'];
+                if (empty($observaciones)) {
+                    $observaciones = null;
+                }
+                $inventario = new Inventario($aula, $articulo[0], $articulo[1], $cantidadArticulos, $fecha, $observaciones);
+
+                //Comprobamos si consulta da error al existir una entrada con las mismas claves
+                if (!$this->daoInventario->insertarInventario($inventario)) {
+                    $this->errorInserccion = true;
+                    $this->mostrarFormulario("validar", $validador, null);
+                    exit();
+                } else {
+                    if ($fecha != null) {
+                        $fecha = date("d/m/Y", strtotime($_POST['fecha']));
+                    }
+                    $resultado = "SE HA INSERTADO CORRECTAMENTE <hr/>Aula: $aula <br/>" .
+                        "Artículo: " . $articulo[0] . " " . $articulo[1] . "<br/>" .
+                        "Cantidad: $cantidadArticulos<br/>" .
+                        "Fecha compra: $fecha<br/>" .
+                        "Observaciones: $observaciones";
+                    $this->mostrarFormulario("continuar", $validador, $resultado);
+                    exit();
+                }
+            } else if (isset($_POST['consultar'])) {
+                $aulas =  "'". implode("','", $_POST['aulas']) . "'";
+                $resul = $this->daoInventario->consultarInventario($aulas);
+                if (!$resul) {
+                } else {
+                    $resultado = "<table>
+                <tr>
+                    <th>Aula</th>
+                    <th>Articulo</th>
+                    <th>Cantidad</th>
+                    <th>Fecha Compra</th>
+                    <th>Obesrvaciones</th>
+                </tr>";
+                    foreach ($resul as $valor) {
+                        $resultado .= "<tr>
+                    <td>" . $valor['clave_instalacion'] . "</td>
+                    <td>" . $valor['articulo'] . "</td>
+                    <td>" . $valor['cantidad'] . "</td>
+                    <td>" . $valor['fecha_compra'] . "</td>
+                    <td>" . $valor['observaciones'] . "</td>
+                    </tr>";
+                    }
+
+                    $resultado .= "</table>";
+                    $this->mostrarConsultar("continuar", $validador, $resultado);
+                    exit();
+                }
             }
-            $observaciones = $_POST['observaciones'];
-            $resultado = "Aula: $aula <br/>" .
-                "Artículo: " . $articulo[0] . " " . $articulo[1] . "<br/>" .
-                "Cantidad: $cantidadArticulos<br/>" .
-                "Fecha compra: $fecha<br/>" .
-                "Observaciones: $observaciones";
-            $this->mostrarFormulario("continuar", $validador, $resultado);
-            exit();
         }
 
         // formulario no correcto, mostrarlo nuevamente con los errores
-        $this->mostrarFormulario("validar", $validador, null);
-        exit();
+        //Comprobamos de que formulario se trata
+        if (isset($_POST['insertar'])) {
+            $this->mostrarFormulario("validar", $validador, null);
+            exit();
+        } else if (isset($_POST['consultar'])) {
+            $this->mostrarConsultar("validar", $validador, null);
+            exit();
+        }
     }
 }

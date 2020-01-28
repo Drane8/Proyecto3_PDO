@@ -39,11 +39,6 @@ class Database implements IDatabase
     {
         $resul = $this->conexion->prepare($sql);
         $resul->execute($args);
-        $mensaje = "Accion ejecutada correctamente";
-        if (!$resul) {
-            $mensaje = "Hubo un problema al realizar la accion";
-        }
-
-        return $mensaje;
+        return $resul;
     }
 }

@@ -157,14 +157,15 @@ class Controlador
                 $resul = $this->daoInventario->consultarInventario($aulas);
                 if (!$resul) {
                 } else {
-                    $resultado = "<table>
-                <tr>
+                    $resultado = "<table class='table'>
+                <thead class='thead-dark'>
+                    <tr>
                     <th>Aula</th>
                     <th>Articulo</th>
                     <th>Cantidad</th>
                     <th>Fecha Compra</th>
-                    <th>Obesrvaciones</th>
-                </tr>";
+                    <th>Observaciones</th>
+                </tr></thead>";
                     foreach ($resul as $valor) {
                         $resultado .= "<tr>
                     <td>" . $valor['clave_instalacion'] . "</td>

@@ -24,7 +24,7 @@ if(isset($errorInserccion)){
 //ENTRADAS
 ?>
 <form id="form" action="index.php" method="post">
-    <div id="datos">
+    <div class="datos">
         <select id="aula" name="aula" required>
             <option value="" class="oculto">--SELECCIONE AULA--</option>
             <?php
@@ -64,7 +64,7 @@ if(isset($errorInserccion)){
 <?php
 //SALIDAS
 if (isset($resultado)) {
-    echo "<div class='texto' />";
+    echo "<div class='resultado' />";
     echo $resultado;
     echo "</div>";
 }

@@ -14,11 +14,11 @@ class Utilidades
         }
     }
 
-    public static function verificarListaMultiple($valores, $valorMenu)
+    public static function verificarCheckbox($valores, $valorMenu)
     {
         if (is_array($valores)) {
             if (in_array($valorMenu, $valores)) {
-                return 'selected = "selected"';
+                return 'checked';
             }
         }
     }

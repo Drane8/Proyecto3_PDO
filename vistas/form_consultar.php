@@ -20,16 +20,38 @@ if (Input::siEnviado("post")) {
 //ENTRADAS
 ?>
 <form id="form" action="index.php" method="post">
-  <div id="datos">
-    <select id="aulaC" name="aulas[]" required multiple>
+  <div class="datos">
+    <div class="container">
+      <div class="selectionator">
+        <span class="search">
+          <span class="shadow"></span>
+          <span class="overlay"></span>
+          SELECCIONE AULA
+        </span>
+        <div class="menu">
+          <ul class="optgroup">
+            <?php
+            foreach ($instalaciones as $instalacion) {
+              $clave = $instalacion->getClave();
+              echo "<li><input type='checkbox' name='aulas[]' value='$clave' id='$clave'";
+              //COMPROBAR
+              echo Utilidades::verificarCheckbox(Input::get("aulas"), $clave);
+              echo "/> <label for='$clave'>$clave</label></li>";
+            }
+            ?>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- <select id="aulaC" name="aulas[]" required multiple> -->
       <?php
-      foreach ($instalaciones as $instalacion) {
+      /* foreach ($instalaciones as $instalacion) {
         $clave = $instalacion->getClave();
         echo "<option value='$clave' ";
         //COMPROBAR
         echo Utilidades::verificarListaMultiple(Input::get("aulas"), $clave);
         echo "> $clave</option>";
-      }
+      } */
       ?>
       <div id="botones">
         <input type="submit" name="consultar" value="<?php echo $fase ?>" /><input type="reset" value="Limpiar" />
@@ -40,7 +62,7 @@ if (Input::siEnviado("post")) {
 <?php
 //SALIDAS
 if (isset($resultado)) {
-  echo "<div class='texto' />";
+  echo "<div class='resultado' />";
   echo $resultado;
   echo "</div>";
 }

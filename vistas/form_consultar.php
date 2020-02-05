@@ -16,6 +16,9 @@ if (Input::siEnviado("post")) {
     echo "</div>";
   }
 }
+if(isset($errorInserccion)){
+    echo "<div class='errores'>El aula no tiene entradas existentes</div>";   
+}
 
 //ENTRADAS
 ?>
@@ -38,21 +41,12 @@ if (Input::siEnviado("post")) {
               echo Utilidades::verificarCheckbox(Input::get("aulas"), $clave);
               echo "/> <label for='$clave'>$clave</label></li>";
             }
+            echo "<li><input type='checkbox' name='aulas[]' value='' id='vacio' checked/></li>"
             ?>
           </ul>
         </div>
       </div>
     </div>
-    <!-- <select id="aulaC" name="aulas[]" required multiple> -->
-      <?php
-      /* foreach ($instalaciones as $instalacion) {
-        $clave = $instalacion->getClave();
-        echo "<option value='$clave' ";
-        //COMPROBAR
-        echo Utilidades::verificarListaMultiple(Input::get("aulas"), $clave);
-        echo "> $clave</option>";
-      } */
-      ?>
       <div id="botones">
         <input type="submit" name="consultar" value="<?php echo $fase ?>" /><input type="reset" value="Limpiar" />
       </div>

@@ -129,6 +129,17 @@ class ValidadorForm
 	}
 
 	/**
+	 * Funcion para comprobar si no se ha seleccionado el aula
+	 *
+	 * @param mixed $valor: Valor a comprobarç
+	 * @return array Array que contiene si se cumple la condicion y el mensaje de error
+	 */
+	public function requiredAulas($valor)
+	{
+		return array(count($valor)<=1, "es necesario seleccionar un aula");
+	}
+
+	/**
 	 * Añade un error al array de errores
 	 *
 	 * @param string $nombreCampo: Campo en el que se ha producido el error

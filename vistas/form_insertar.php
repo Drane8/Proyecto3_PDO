@@ -17,8 +17,7 @@ if (Input::siEnviado("post")) {
     }
 }
 if(isset($errorInserccion)){
-    echo "<div class='errores'>Ya existe una entrada con esas claves en la base de datos </div>";
-    setcookie("errorInserccion",true, time() - 1);        
+    echo "<div class='errores'>Ya existe una entrada con esas claves en la base de datos </div>";   
 }
 
 //ENTRADAS

@@ -15,6 +15,9 @@ class Controlador
     private $daoInventario;
     private $errorInserccion;
 
+    /**
+     * Constructor de la clase Controlador
+     */
     public function __construct()
     {
         $this->daoArticulo = new DaoArticulo();
@@ -59,7 +62,7 @@ class Controlador
     /**
      * Se encarga de mostrar la vista inicial de la página
      */
-    private function mostrarInicio()
+    public function mostrarInicio()
     {
         include "vistas/bienvenida.php";
     }
@@ -67,9 +70,12 @@ class Controlador
     /**
      * Se encarga de mostrar la vista del formulario de consultar
      */
-    private function mostrarConsultar($fase, $validador, $resultado)
+    public function mostrarConsultar($fase, $validador, $resultado)
     {
-        $instalaciones = $this->daoInstalacion->consultarInstalaciones();
+        if ($this->errorInserccion) {
+            $errorInserccion = true;
+        }
+        $instalaciones = $this->obtenerInstalaciones();
         include "vistas/form_consultar.php";
     }
 
@@ -80,10 +86,12 @@ class Controlador
      * @param mixed $validador: El objeto con el que se va a validar los datos
      * @param mixed $resultado: El resultado para mostrar los datos una vez validados
      */
-    private function mostrarFormulario($fase, $validador, $resultado)
+    public function mostrarFormulario($fase, $validador, $resultado)
     {
-        $instalaciones = $this->daoInstalacion->consultarInstalaciones();
-        $articulos = $this->daoArticulo->consultarArticulos();
+        $instalaciones = $this->obtenerInstalaciones();
+
+        $articulos = $this->obtenerArticulos();
+
         if ($this->errorInserccion) {
             $errorInserccion = true;
         }
@@ -95,7 +103,7 @@ class Controlador
      *
      * @return mixed Devuelve un array con las reglas de validacion
      */
-    private function crearReglasDeValidacion()
+    public function crearReglasDeValidacion()
     {
         $reglasValidacion = array(
             "aula" => array("required" => true),
@@ -103,6 +111,7 @@ class Controlador
             "cantidadArticulos" => array("min" => 1, "max" => 100, "required" => true),
             "fecha" => array("fechaMax" => date('Y-m-d')),
             "observaciones" => array("maxCaracteres" => 250),
+            "aulas" => array("requiredAulas"=>true)
         );
 
         return $reglasValidacion;
@@ -112,7 +121,7 @@ class Controlador
      * Funcion utilizada para validar los datos. A traves de esta funcion
      * hacemos uso de la clase ValidadorForm.
      */
-    private function validar()
+    public function validar()
     {
         $validador = new ValidadorForm();
         $reglasValidacion = $this->crearReglasDeValidacion();
@@ -152,10 +161,14 @@ class Controlador
                     $this->mostrarFormulario("continuar", $validador, $resultado);
                     exit();
                 }
-            } else if (isset($_POST['consultar'])) {
-                $aulas =  "'". implode("','", $_POST['aulas']) . "'";
+            } else if (isset($_POST['consultar'])) { //Cuando se trata del formulario de consultar
+                $aulas =  "'" . implode("','", $_POST['aulas']) . "'";
                 $resul = $this->daoInventario->consultarInventario($aulas);
+                //Comprobamos si la consulta da error
                 if (!$resul) {
+                    $this->errorInserccion = true;
+                    $this->mostrarConsultar("validar", $validador, null);
+                    exit();
                 } else {
                     $resultado = "<table class='table'>
                 <thead class='thead-dark'>
@@ -192,5 +205,37 @@ class Controlador
             $this->mostrarConsultar("validar", $validador, null);
             exit();
         }
+    }
+
+    /**
+     * Funcion que devuelve un array con las instalaciones
+     *
+     * @return array Array con las instalaciones existentes
+     */
+    public function obtenerInstalaciones()
+    {
+        $consultaInstalaciones = $this->daoInstalacion->consultarInstalaciones();
+        $instalaciones = array();
+        foreach ($consultaInstalaciones as $valor) {
+            $instalacion = new Instalacion($valor['clave_instalacion'], $valor['instalacion']);
+            $instalaciones[] = $instalacion;
+        }
+        return $instalaciones;
+    }
+
+    /**
+     * Funcion que devuelve un array con los articulos
+     *
+     * @return array Array con los articulos existentes
+     */
+    public function obtenerArticulos()
+    {
+        $consultaArticulos = $this->daoArticulo->consultarArticulos();
+        $articulos = array();
+        foreach ($consultaArticulos as $valor) {
+            $articulo = new Articulo($valor['codigo'], $valor['articulo']);
+            $articulos[] = $articulo;
+        }
+        return $articulos;
     }
 }

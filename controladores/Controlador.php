@@ -180,13 +180,17 @@ class Controlador
                     <th>Observaciones</th>
                 </tr></thead>";
                     foreach ($resul as $valor) {
+                        $fecha = $valor['fecha_compra'];
+                        if ($fecha != null) {
+                            $fecha = date("d/m/Y", strtotime($valor['fecha_compra']));
+                        }
                         $resultado .= "<tr>
-                    <td>" . $valor['clave_instalacion'] . "</td>
-                    <td>" . $valor['articulo'] . "</td>
-                    <td>" . $valor['cantidad'] . "</td>
-                    <td>" . $valor['fecha_compra'] . "</td>
-                    <td>" . $valor['observaciones'] . "</td>
-                    </tr>";
+                            <td>" . $valor['clave_instalacion'] . "</td>
+                            <td>" . $valor['articulo'] . "</td>
+                            <td>" . $valor['cantidad'] . "</td>
+                            <td>" . $fecha . "</td>
+                            <td>" . $valor['observaciones'] . "</td>
+                            </tr>";
                     }
 
                     $resultado .= "</table>";

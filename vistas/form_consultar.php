@@ -10,7 +10,7 @@ if (Input::siEnviado("post")) {
   if (!empty($errores)) {
     echo "<div class='errores'>";
     foreach ($errores as $campo => $mensajeError) {
-      echo "<p>$mensajeError</p>\n";
+      echo "$mensajeError<br/>";
       unset($_POST[$campo]);
     }
     echo "</div>";
@@ -56,7 +56,7 @@ if(isset($errorInserccion)){
 <?php
 //SALIDAS
 if (isset($resultado)) {
-  echo "<div class='resultado' />";
+  echo "<div class='tabla' />";
   echo $resultado;
   echo "</div>";
 }
